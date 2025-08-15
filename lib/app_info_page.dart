@@ -29,7 +29,13 @@ class _AppInfoPageState extends State<AppInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('App Information'),
+        title: const Text(
+          'App Information',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -37,6 +43,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
           children: [
             const ListTile(
               leading: Icon(Icons.info_outline),
+              iconColor: Color.fromARGB(255, 42, 77, 255),
               title: Text('Khoj AI'),
               subtitle: Text('Missing Person Reporting'),
             ),
@@ -54,7 +61,12 @@ class _AppInfoPageState extends State<AppInfoPage> {
                       applicationName: 'Khoj AI',
                       applicationVersion: _version);
                 },
-                child: const Text('About')),
+                child: const Text(
+                  'About',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 42, 77, 255),
+                      fontWeight: FontWeight.bold),
+                )),
           ],
         ),
       ),

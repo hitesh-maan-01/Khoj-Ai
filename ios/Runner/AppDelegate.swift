@@ -10,4 +10,5 @@ import UIKit
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+  GMSServices.provideAPIKey("YOUR_API_KEY")
 }

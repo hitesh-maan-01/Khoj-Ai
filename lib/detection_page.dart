@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'new_message.dart';
 
 class DetectionsPage extends StatefulWidget {
   const DetectionsPage({super.key});
@@ -151,15 +152,32 @@ class _DetectionsPageState extends State<DetectionsPage>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detections'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 1,
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context)),
         actions: [
           IconButton(
-              icon: const Icon(Icons.notifications_none), onPressed: () {})
+              icon: const Icon(Icons.notifications_none),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const MessagePage(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.easeInOut;
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              })
         ],
       ),
       body: Column(

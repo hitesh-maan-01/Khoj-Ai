@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile.dart';
 import 'notification_page.dart';
-import 'role_mangement_page.dart';
 import 'app_info_page.dart';
+import 'contact_team_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -17,32 +16,15 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage>
     with SingleTickerProviderStateMixin {
-  bool _offlineMode = false;
   late AnimationController _animController;
-
-  static const _offlineKey = 'offline_mode_enabled';
+  final Color accentColor = const Color.fromARGB(255, 42, 77, 255);
 
   @override
   void initState() {
     super.initState();
     _animController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 600));
-    _loadOfflineMode();
     _animController.forward();
-  }
-
-  Future<void> _loadOfflineMode() async {
-    final prefs = await SharedPreferences.getInstance();
-    final enabled = prefs.getBool(_offlineKey) ?? false;
-    setState(() => _offlineMode = enabled);
-  }
-
-  Future<void> _setOfflineMode(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_offlineKey, value);
-    setState(() => _offlineMode = value);
-    final snack = value ? 'Offline mode enabled' : 'Offline mode disabled';
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(snack)));
   }
 
   @override
@@ -68,30 +50,40 @@ class _SettingsPageState extends State<SettingsPage>
         actions: [
           TextButton(
               onPressed: () => Navigator.of(c).pop(false),
-              child: const Text('Cancel')),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Color.fromARGB(255, 42, 77, 255)),
+              )),
           ElevatedButton(
               onPressed: () => Navigator.of(c).pop(true),
-              child: const Text('Logout')),
+              child: const Text(
+                'Logout',
+                style: TextStyle(color: Color.fromARGB(255, 42, 77, 255)),
+              )),
         ],
       ),
     );
     if (ok == true) {
       // Replace with your real logout logic (auth signOut, clearing storage, etc.)
       ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Logged out (demo)')));
+          .showSnackBar(const SnackBar(content: Text('Logged out')));
       // Example: Navigator.pushReplacementNamed(context, '/login');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final profileHeroTag = 'settings-profile-hero';
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text(
+          'Settings',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         centerTitle: false,
         elevation: 1,
+        backgroundColor: accentColor,
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FadeTransition(
         opacity: CurvedAnimation(parent: _animController, curve: Curves.easeIn),
@@ -108,59 +100,29 @@ class _SettingsPageState extends State<SettingsPage>
                 ),
                 children: [
                   // Profile header
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 16),
-                      child: Row(
-                        children: [
-                          Hero(
-                            tag: profileHeroTag,
-                            child: CircleAvatar(
-                              radius: 30,
-                              backgroundImage: const NetworkImage(
-                                  'https://randomuser.me/api/portraits/men/32.jpg'),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text('Officer John Smith',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16)),
-                                SizedBox(height: 4),
-                                Text('Senior Detective',
-                                    style: TextStyle(color: Colors.black54)),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 6),
-                            decoration: BoxDecoration(
-                                color: Colors.blue.shade50,
-                                borderRadius: BorderRadius.circular(12)),
-                            child: const Text('Active Status',
-                                style: TextStyle(color: Colors.blueAccent)),
-                          ),
-                        ],
-                      ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundImage: const NetworkImage(
+                          'https://randomuser.me/api/portraits/men/32.jpg'),
+                      backgroundColor: accentColor.withOpacity(0.1),
                     ),
+                    title: const Text('Officer Randeep Singh',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16)),
+                    subtitle: const Text('Sub Inspector',
+                        style: TextStyle(color: Colors.black54)),
+                    onTap: () => _openPage(const EditProfilePage()),
                   ),
 
-                  const SizedBox(height: 16),
+                  const Divider(height: 30),
 
                   // Edit Profile
                   ListTile(
-                    leading: const Icon(Icons.person),
+                    leading: Icon(Icons.person, color: accentColor),
                     title: const Text('Edit Profile'),
                     subtitle: const Text('Update personal information'),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: Icon(Icons.chevron_right, color: accentColor),
                     onTap: () => _openPage(const EditProfilePage()),
                   ),
 
@@ -168,49 +130,33 @@ class _SettingsPageState extends State<SettingsPage>
 
                   // Notifications
                   ListTile(
-                    leading: const Icon(Icons.notifications),
+                    leading: Icon(Icons.notifications, color: accentColor),
                     title: const Text('Notifications'),
                     subtitle: const Text('Manage alert preferences'),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: Icon(Icons.chevron_right, color: accentColor),
                     onTap: () => _openPage(const NotificationsPage()),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // Offline Mode
-                  ListTile(
-                    leading: const Icon(Icons.cloud_off),
-                    title: const Text('Offline Mode'),
-                    subtitle: const Text('Work without internet'),
-                    trailing: Switch(
-                      value: _offlineMode,
-                      onChanged: (v) => _setOfflineMode(v),
-                    ),
-                    onTap: () => _setOfflineMode(!_offlineMode),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // Role Management
-                  ListTile(
-                    leading: const Icon(Icons.shield),
-                    title: const Text('Role Management'),
-                    subtitle: const Text('Permissions & access control'),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => _openPage(const RoleManagementPage()),
                   ),
 
                   const SizedBox(height: 8),
 
                   // App Information
                   ListTile(
-                    leading: const Icon(Icons.info_outline),
+                    leading: Icon(Icons.info_outline, color: accentColor),
                     title: const Text('App Information'),
                     subtitle: const Text('Version 2.1.0'),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: Icon(Icons.chevron_right, color: accentColor),
                     onTap: () => _openPage(const AppInfoPage()),
                   ),
 
+                  const SizedBox(height: 8),
+                  // Contact Our Team
+                  ListTile(
+                    leading: Icon(Icons.contact_mail, color: accentColor),
+                    title: const Text('Contact Our Team'),
+                    subtitle: const Text('Send feedback or get in touch'),
+                    trailing: Icon(Icons.chevron_right, color: accentColor),
+                    onTap: () => _openPage(const ContactTeamPage()),
+                  ),
                   const SizedBox(height: 8),
 
                   // Secure Logout

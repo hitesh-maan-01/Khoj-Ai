@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'case_details_page.dart'; // keep/update path if located elsewhere
+// keep/update path if located elsewhere
 
 class ReportMissingPersonFlow extends StatefulWidget {
   const ReportMissingPersonFlow({super.key});
@@ -120,9 +120,9 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please complete all required fields.')),
       );
-      if (!valid1)
+      if (!valid1) {
         _goToPage(0);
-      else if (!valid2) _goToPage(1);
+      } else if (!valid2) _goToPage(1);
       return;
     }
 
@@ -269,7 +269,10 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
         const EdgeInsets.symmetric(horizontal: 16, vertical: 12);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Report Missing Person'),
+        title: const Text(
+          'Report Missing Person',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         centerTitle: false,
         elevation: 1,
         backgroundColor: const Color.fromARGB(255, 42, 77, 255),
@@ -434,10 +437,15 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () => _validateAndNext(),
-                                  child: const Text('Continue'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         const Color.fromARGB(255, 42, 77, 255),
+                                  ),
+                                  child: const Text(
+                                    'Continue',
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255)),
                                   ),
                                 ),
                               ),
@@ -468,7 +476,7 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                   controller: _heightController,
                                   keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
-                                      labelText: 'Height (cm) *',
+                                      labelText: 'Height (cm/Feet) *',
                                       prefixIcon: Icon(Icons.height)),
                                   validator: (v) =>
                                       (v == null || v.trim().isEmpty)
@@ -532,7 +540,7 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                           TextFormField(
                             controller: _additionalNotesController,
                             decoration: const InputDecoration(
-                                labelText: 'Additional Notes',
+                                labelText: 'Circumstances of missing',
                                 prefixIcon: Icon(Icons.note),
                                 alignLabelWithHint: true),
                             maxLines: 3,
@@ -548,10 +556,15 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () => _validateAndNext(),
-                                  child: const Text('Continue'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         const Color.fromARGB(255, 42, 77, 255),
+                                  ),
+                                  child: const Text(
+                                    'Continue',
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255)),
                                   ),
                                 ),
                               )
@@ -630,18 +643,23 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: _onSubmit,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 42, 77, 255),
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: const [
-                                        Text('Submit Report'),
+                                        Text(
+                                          'Submit Report',
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 255, 255, 255)),
+                                        ),
                                         SizedBox(width: 8),
                                         Icon(Icons.send),
                                       ],
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 42, 77, 255),
                                     ),
                                   ),
                                 ),
