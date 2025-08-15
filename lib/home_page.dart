@@ -11,25 +11,25 @@ class DashboardPage extends StatelessWidget {
   final List<Map<String, dynamic>> dashboardCards = [
     {
       "title": "Total Cases",
-      "value": "247",
+      "value": "25",
       "change": "+12%",
       "color": Colors.blue
     },
     {
       "title": "Live Matches",
-      "value": "18",
+      "value": "0",
       "status": "Live",
       "color": Colors.green
     },
     {
       "title": "New Reports",
-      "value": "34",
+      "value": "3",
       "status": "New",
       "color": Colors.orange
     },
     {
       "title": "Verifications",
-      "value": "12",
+      "value": "0",
       "status": "Pending",
       "color": Colors.purple
     },

@@ -8,17 +8,13 @@ class RecentActivity extends StatelessWidget {
     {
       "type": "High Priority Alert",
       "detail": "Missing person case #MP-2024-001",
-      "time": "2m ago"
+      "time": "22h ago"
     },
-    {
-      "type": "Case Resolved",
-      "detail": "Theft case #TH-2024-045 closed",
-      "time": "15m ago"
-    },
+    {"type": "Case Resolved", "detail": "TH-2024-045 closed", "time": "21 ago"},
     {
       "type": "New Detection",
       "detail": "Facial recognition match found",
-      "time": "1h ago"
+      "time": "7h ago"
     },
   ];
 

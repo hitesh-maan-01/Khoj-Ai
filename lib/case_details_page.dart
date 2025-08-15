@@ -171,7 +171,7 @@ class _AnimatedContentState extends State<_AnimatedContent> {
               _buildInfoCard(
                   icon: Icons.place,
                   label: "Location",
-                  value: widget.report['lastSeenLocation_input'] ?? '-'),
+                  value: widget.report['lastSeenLocation'] ?? '-'),
             ],
           ),
           const SizedBox(height: 20),
@@ -185,20 +185,20 @@ class _AnimatedContentState extends State<_AnimatedContent> {
               _buildInfoCard(
                   icon: Icons.person_pin,
                   label: "Name",
-                  value: widget.report['guardianName'] ?? '-'),
+                  value: widget.report['guardian'] ?? '-'),
               _buildInfoCard(
                   icon: Icons.phone,
                   label: "Contact",
-                  value: widget.report['guardianContact'] ?? '-'),
+                  value: widget.report['contact'] ?? '-'),
             ],
           ),
           const SizedBox(height: 20),
 
           // Description Section
           _buildDescriptionSection(
-            title: "Description",
+            title: "circumstances of missing",
             color: widget.accentColor,
-            value: widget.report['description'] ?? '-',
+            value: widget.report['notes'] ?? '-',
           ),
           const SizedBox(height: 20),
 
@@ -271,7 +271,7 @@ class _AnimatedContentState extends State<_AnimatedContent> {
           decoration: BoxDecoration(
             color: Colors.grey.shade100,
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: const Color.fromARGB(255, 172, 171, 182)),
           ),
           child: Text(
             value,

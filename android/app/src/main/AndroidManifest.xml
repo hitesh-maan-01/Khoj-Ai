@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" /> <!-- For Android 13+ -->
 
     <application
-        android:label="Khoj Ai"
+        android:label="Khoj AI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         

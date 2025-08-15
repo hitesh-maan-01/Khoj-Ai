@@ -227,10 +227,8 @@ class _ReportsPageState extends State<ReportsPage> {
                                                   "Name", report['fullName']),
                                               _buildDetailRow(
                                                   "Age", report['age']),
-                                              _buildDetailRow(
-                                                  "Location",
-                                                  report[
-                                                      'lastSeenLocation_input']),
+                                              _buildDetailRow("Location",
+                                                  report['lastSeenLocation']),
                                             ],
                                           ),
                                         ),

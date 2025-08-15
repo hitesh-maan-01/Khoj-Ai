@@ -356,7 +356,15 @@ class DetectionDetailPage extends StatelessWidget {
                 label: const Text('Verify')),
             const SizedBox(height: 8),
             ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('verified'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  Navigator.pop(context);
+                },
                 icon: const Icon(Icons.notifications_active),
                 label: const Text('Notify HQ')),
             const SizedBox(height: 8),

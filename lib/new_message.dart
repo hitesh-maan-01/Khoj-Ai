@@ -45,8 +45,8 @@ class _MessagePageState extends State<MessagePage> {
         title: const Text("Messages"),
         backgroundColor: const Color.fromARGB(255, 42, 77, 255),
         titleTextStyle: TextStyle(
-            color: Color.fromARGB(255, 255, 255, 255),
-            fontWeight: FontWeight.bold),
+          color: Color.fromARGB(255, 255, 255, 255),
+        ),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
