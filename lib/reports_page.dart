@@ -184,8 +184,8 @@ class _ReportsPageState extends State<ReportsPage> {
                                     child: Row(
                                       children: [
                                         // Image thumbnail
-                                        (report['imagePath'] != null &&
-                                                report['imagePath']
+                                        (report['photoPath'] != null &&
+                                                report['photoPath']
                                                     .toString()
                                                     .isNotEmpty)
                                             ? Hero(
@@ -195,7 +195,7 @@ class _ReportsPageState extends State<ReportsPage> {
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                   child: Image.file(
-                                                    File(report['imagePath']),
+                                                    File(report['photoPath']),
                                                     width: 100,
                                                     height: 100,
                                                     fit: BoxFit.cover,
@@ -230,7 +230,7 @@ class _ReportsPageState extends State<ReportsPage> {
                                               _buildDetailRow(
                                                   "Location",
                                                   report[
-                                                      'lastSeenlocation_input']),
+                                                      'lastSeenLocation_input']),
                                             ],
                                           ),
                                         ),
