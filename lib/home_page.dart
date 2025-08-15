@@ -125,7 +125,8 @@ class DashboardPage extends StatelessWidget {
                           style: TextStyle(color: Colors.white70)),
                       Chip(
                         label: Text("Active Duty",
-                            style: TextStyle(color: Colors.white)),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 42, 77, 255))),
                         backgroundColor: Colors.white24,
                       )
                     ],

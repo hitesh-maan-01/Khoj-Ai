@@ -6,6 +6,7 @@ import 'edit_profile.dart';
 import 'notification_page.dart';
 import 'app_info_page.dart';
 import 'contact_team_page.dart';
+import 'login_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -55,11 +56,19 @@ class _SettingsPageState extends State<SettingsPage>
                 style: TextStyle(color: Color.fromARGB(255, 42, 77, 255)),
               )),
           ElevatedButton(
-              onPressed: () => Navigator.of(c).pop(true),
-              child: const Text(
-                'Logout',
-                style: TextStyle(color: Color.fromARGB(255, 42, 77, 255)),
-              )),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoginPage()), // Redirect to login
+              );
+            },
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: Color.fromARGB(255, 42, 77, 255)),
+            ),
+          ),
         ],
       ),
     );
@@ -103,8 +112,8 @@ class _SettingsPageState extends State<SettingsPage>
                   ListTile(
                     leading: CircleAvatar(
                       radius: 30,
-                      backgroundImage: const NetworkImage(
-                          'https://randomuser.me/api/portraits/men/32.jpg'),
+                      backgroundImage:
+                          const NetworkImage('https://via.placeholder.com/150'),
                       backgroundColor: accentColor.withOpacity(0.1),
                     ),
                     title: const Text('Officer Randeep Singh',
@@ -112,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage>
                             fontWeight: FontWeight.bold, fontSize: 16)),
                     subtitle: const Text('Sub Inspector',
                         style: TextStyle(color: Colors.black54)),
-                    onTap: () => _openPage(const EditProfilePage()),
+                    onTap: () => _openPage(const ProfilePage()),
                   ),
 
                   const Divider(height: 30),
@@ -120,10 +129,10 @@ class _SettingsPageState extends State<SettingsPage>
                   // Edit Profile
                   ListTile(
                     leading: Icon(Icons.person, color: accentColor),
-                    title: const Text('Edit Profile'),
-                    subtitle: const Text('Update personal information'),
+                    title: const Text('Profile'),
+                    subtitle: const Text('View details'),
                     trailing: Icon(Icons.chevron_right, color: accentColor),
-                    onTap: () => _openPage(const EditProfilePage()),
+                    onTap: () => _openPage(const ProfilePage()),
                   ),
 
                   const SizedBox(height: 8),

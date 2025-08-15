@@ -1,170 +1,169 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage>
-    with SingleTickerProviderStateMixin {
-  final _formKey = GlobalKey<FormState>();
-  final _nameCtrl = TextEditingController(text: 'Jai Shree Ram');
-  final _roleCtrl = TextEditingController(text: 'God Detective');
-  String? _status = 'Active';
-  File? _imageFile;
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
+  final String name = "Randeep Singh";
+  final String role = "Sub Inspector";
+  final String email = "randeepsingh@gmail.com";
+  final String profileImage = "https://via.placeholder.com/150";
 
-  late AnimationController _controller;
+  late AnimationController _fadeController;
+  late AnimationController _imageController;
   late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 500));
-    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _controller.forward();
+
+    // Fade-in animation for profile info
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _fadeAnimation =
+        CurvedAnimation(parent: _fadeController, curve: Curves.easeIn);
+
+    // Scale animation for profile picture
+    _imageController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+      lowerBound: 0.8,
+      upperBound: 1.0,
+    );
+    _scaleAnimation =
+        CurvedAnimation(parent: _imageController, curve: Curves.elasticOut);
+
+    // Start animations with a small delay
+    Future.delayed(const Duration(milliseconds: 200), () {
+      _fadeController.forward();
+      _imageController.forward();
+    });
   }
 
   @override
   void dispose() {
-    _nameCtrl.dispose();
-    _roleCtrl.dispose();
-    _controller.dispose();
+    _fadeController.dispose();
+    _imageController.dispose();
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
-    if (pickedFile != null) {
-      setState(() => _imageFile = File(pickedFile.path));
-    }
-  }
+  void _changePassword() {
+    final TextEditingController newPasswordCtrl = TextEditingController();
 
-  void _save() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Here you can persist update (call backend or shared_prefs)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile saved successfully')),
-      );
-      Navigator.pop(context, {
-        'name': _nameCtrl.text,
-        'role': _roleCtrl.text,
-        'status': _status,
-        'image': _imageFile
-      });
-    }
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: '',
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (_, __, ___) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          title: const Text("Change Password"),
+          content: TextField(
+            controller: newPasswordCtrl,
+            obscureText: true,
+            decoration: const InputDecoration(
+              labelText: "New Password",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("Password updated successfully")),
+                );
+              },
+              child: const Text("Update"),
+            ),
+          ],
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
+          child: child,
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Edit Profile',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: const Color.fromARGB(255, 42, 77, 255),
-          elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.white),
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        body: Padding(
+        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: Hero(
-                    tag: 'profile-pic',
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _imageFile != null
-                          ? FileImage(_imageFile!)
-                          : const NetworkImage(
-                                  'https://via.placeholder.com/150')
-                              as ImageProvider,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: const BoxDecoration(
-                                color: Colors.black54,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.camera_alt,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+          child: Column(
+            children: [
+              ScaleTransition(
+                scale: _scaleAnimation,
+                child: CircleAvatar(
+                  radius: 55,
+                  backgroundImage: NetworkImage(profileImage),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                name,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                email,
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                "Role: $role",
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 30),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                elevation: 3,
+                child: ListTile(
+                  leading: const Icon(Icons.lock, color: Colors.blue),
+                  title: const Text(
+                    "Change Password",
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: _changePassword,
                 ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: _nameCtrl,
-                  decoration: const InputDecoration(labelText: 'Full name'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your name' : null,
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _roleCtrl,
-                  decoration: const InputDecoration(labelText: 'Role'),
-                  validator: (value) =>
-                      value!.isEmpty ? 'Please enter your role' : null,
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  value: _status,
-                  items: const [
-                    DropdownMenuItem(value: 'Active', child: Text('Active')),
-                    DropdownMenuItem(
-                        value: 'Inactive', child: Text('Inactive')),
-                  ],
-                  onChanged: (v) => setState(() => _status = v),
-                  decoration: const InputDecoration(labelText: 'Status'),
-                ),
-                const Spacer(),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(
-                          255, 42, 77, 255), // Button color
-                      foregroundColor: Colors.white, // Text color
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    onPressed: _save,
-                    child: const Text(
-                      'Save',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                )
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

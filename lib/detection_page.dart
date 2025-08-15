@@ -22,7 +22,7 @@ class _DetectionsPageState extends State<DetectionsPage>
       "age": 20,
       "caseId": "#CR-2024-001",
       "time": DateTime.now().subtract(const Duration(hours: 2)),
-      "location": "Thikna Koni",
+      "location": "Panipat",
       "status": "Pending",
       "confidence": 95,
       "image": "https://randomuser.me/api/portraits/men/32.jpg"
@@ -42,7 +42,7 @@ class _DetectionsPageState extends State<DetectionsPage>
       "age": 21,
       "caseId": "#CR-2024-003",
       "time": DateTime.now().subtract(const Duration(days: 1)),
-      "location": "Phosgarh karnal",
+      "location": "karnal",
       "status": "Alerted",
       "confidence": 72,
       "image": "https://randomuser.me/api/portraits/men/22.jpg"
@@ -208,30 +208,6 @@ class _DetectionsPageState extends State<DetectionsPage>
             ),
           ),
 
-          // Filter chips
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                ChoiceChip(
-                    label: const Text('Location'),
-                    selected: false,
-                    onSelected: (v) {}),
-                const SizedBox(width: 8),
-                ChoiceChip(
-                    label: const Text('Date'),
-                    selected: false,
-                    onSelected: (v) {}),
-                const SizedBox(width: 8),
-                ChoiceChip(
-                    label: const Text('Confidence'),
-                    selected: false,
-                    onSelected: (v) {}),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-
           // Animated List
           Expanded(
             child: ListView.builder(
@@ -351,11 +327,6 @@ class DetectionDetailPage extends StatelessWidget {
             _infoRow('Confidence', '$conf%'),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.verified),
-                label: const Text('Verify')),
-            const SizedBox(height: 8),
-            ElevatedButton.icon(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -365,11 +336,20 @@ class DetectionDetailPage extends StatelessWidget {
                   );
                   Navigator.pop(context);
                 },
-                icon: const Icon(Icons.notifications_active),
-                label: const Text('Notify HQ')),
+                icon: const Icon(Icons.verified),
+                label: const Text('Verify')),
+            const SizedBox(height: 8),
             const SizedBox(height: 8),
             OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Dismissed'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  Navigator.pop(context);
+                },
                 icon: const Icon(Icons.close),
                 label: const Text('Dismiss')),
           ],
