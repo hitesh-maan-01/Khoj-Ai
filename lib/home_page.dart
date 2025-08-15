@@ -4,6 +4,7 @@ import 'package:badges/badges.dart' as badges;
 import 'quick_actions.dart';
 import 'recent_activity.dart';
 import 'new_message.dart'; // Make sure this is your renamed MessagePage
+import 'chatbot_screen.dart'; // ✅ Added import for chatbot
 
 class DashboardPage extends StatelessWidget {
   DashboardPage({super.key});
@@ -35,8 +36,6 @@ class DashboardPage extends StatelessWidget {
     },
   ];
 
-  // For demo, we set a static notification count
-  // In your real app, fetch from backend or state management
   final int newMessageCount = 0;
 
   @override
@@ -209,6 +208,29 @@ class DashboardPage extends StatelessWidget {
             RecentActivity(),
           ],
         ),
+      ),
+
+      // ✅ Floating Chatbot Button
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF2A4DFF),
+        child: const Icon(Icons.chat, color: Colors.white),
+        onPressed: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const ChatbotScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(0.0, 1.0);
+                const end = Offset.zero;
+                final tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: Curves.easeInOut));
+                return SlideTransition(
+                    position: animation.drive(tween), child: child);
+              },
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,5 @@
 name: khoj_ai
-description: "A new Flutter project."
+description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -25,7 +25,10 @@ dependencies:
   mailer: ^6.1.0
   url_launcher: ^6.2.5
   badges: ^3.1.2
-  
+  dialog_flowtter: ^0.3.3
+  flutter_chat_ui: ^1.6.5
+  flutter_chat_types: ^3.4.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,6 +36,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/khoj_ai_bot.json
+    - assets/bg/futuristic_bg.jpg
+
 
 flutter_icons:
   android: true
@@ -40,8 +47,7 @@ flutter_icons:
   image_path: "assets/icon/app_icon.png"
 
 flutter_native_splash:
-  color: "#ffffff" # background color
-  image: assets/icon/app_icon.png # your logo
+  color: "#ffffff"
+  image: assets/icon/app_icon.png
   android: true
   ios: true
-
