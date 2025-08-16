@@ -13,7 +13,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   bool email = false;
   bool sms = false;
 
-  final Color accentColor = const Color.fromARGB(255, 42, 77, 255);
+  final Color accentColor = const Color.fromARGB(255, 13, 71, 161);
 
   // A list of notification settings to make the UI dynamic
   late final List<Map<String, dynamic>> _notificationSettings;
@@ -55,7 +55,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           'Notifications',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: accentColor,
+        backgroundColor: Color.fromARGB(255, 13, 71, 161),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),

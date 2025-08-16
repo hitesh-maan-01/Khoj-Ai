@@ -4,7 +4,7 @@ import 'package:badges/badges.dart' as badges;
 import 'quick_actions.dart';
 import 'recent_activity.dart';
 import 'new_message.dart'; // Make sure this is your renamed MessagePage
-import 'chatbot_screen.dart'; // ✅ Added import for chatbot
+import 'chatbot_screen.dart'; // ✅ Added import for chatbo
 
 class DashboardPage extends StatelessWidget {
   DashboardPage({super.key});
@@ -43,7 +43,7 @@ class DashboardPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2A4DFF),
+        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
         elevation: 0,
         title: const Text(
           "Khoj AI",
@@ -99,7 +99,7 @@ class DashboardPage extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(
-                color: Color(0xFF2A4DFF),
+                color: Color.fromARGB(255, 13, 71, 161),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -109,23 +109,22 @@ class DashboardPage extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 28,
-                    backgroundImage: AssetImage("assets/profile.jpg"),
+                    backgroundImage: AssetImage("assets/Shubham/img_yadav.jpg"),
                   ),
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text("Officer Name",
+                      Text("Shubham Yadav",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
                               fontWeight: FontWeight.bold)),
-                      Text("Rank / Position",
-                          style: TextStyle(color: Colors.white70)),
+                      Text("Admin", style: TextStyle(color: Colors.white70)),
                       Chip(
                         label: Text("Active Duty",
                             style: TextStyle(
-                                color: Color.fromARGB(255, 42, 77, 255))),
+                                color: Color.fromARGB(255, 13, 71, 161))),
                         backgroundColor: Colors.white24,
                       )
                     ],
@@ -212,8 +211,25 @@ class DashboardPage extends StatelessWidget {
 
       // ✅ Floating Chatbot Button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF2A4DFF),
-        child: const Icon(Icons.chat, color: Colors.white),
+        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16), // gives a unique look
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text("💬", style: TextStyle(fontSize: 22)), // emoji
+            SizedBox(height: 2),
+            Text(
+              "Chat",
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
         onPressed: () {
           Navigator.push(
             context,

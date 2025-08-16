@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class IdentifyPage extends StatefulWidget {
   const IdentifyPage({super.key});
@@ -12,125 +13,108 @@ class IdentifyPage extends StatefulWidget {
 }
 
 class _IdentifyPageState extends State<IdentifyPage>
-    with SingleTickerProviderStateMixin {
-  File? _galleryImageFile;
-  File? _cameraImageFile;
+    with TickerProviderStateMixin {
+  File? _image;
   bool _loading = false;
-  List<dynamic> _matches = [];
+  List<Map<String, dynamic>> _matches = [];
+
   final ImagePicker _picker = ImagePicker();
-  final String apiUrl = "http://192.168.122.20:8000/face/search";
 
-  late AnimationController _animController;
-  late Animation<Offset> _slideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-    _slideAnimation =
-        Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
-        _galleryImageFile = File(pickedFile.path);
-        _matches.clear();
-      });
-    }
-  }
-
-  Future<void> _captureImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      setState(() {
-        _cameraImageFile = File(pickedFile.path);
+        _image = File(pickedFile.path);
         _matches.clear();
       });
     }
   }
 
   Future<void> _searchDatabase() async {
-    // Use camera image if available, else gallery image
-    final selectedFile = _cameraImageFile ?? _galleryImageFile;
-    if (selectedFile == null) return;
+    if (_image == null) return;
 
-    setState(() {
-      _loading = true;
-      _matches.clear();
-    });
+    setState(() => _loading = true);
 
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse("http://192.168.122.20:8000/face/search"),
+      );
+
       request.files
-          .add(await http.MultipartFile.fromPath('file', selectedFile.path));
+          .add(await http.MultipartFile.fromPath('file', _image!.path));
+      final response = await request.send();
 
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
-      var jsonResponse = json.decode(responseData);
+      if (response.statusCode == 200) {
+        final res = await response.stream.bytesToString();
+        final data = json.decode(res);
 
-      setState(() {
-        _matches = jsonResponse["matches"] ?? [];
-      });
-
-      if (_matches.isNotEmpty) {
-        _animController.forward(from: 0);
+        setState(() {
+          _matches = List<Map<String, dynamic>>.from(data['matches'] ?? []);
+        });
+      } else {
+        debugPrint("API Error: ${response.statusCode}");
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
-    } finally {
-      setState(() => _loading = false);
+      debugPrint("Error: $e");
     }
+
+    setState(() => _loading = false);
   }
 
-  Widget _buildImageContainer({
-    required String label,
-    required IconData icon,
-    required File? imageFile,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        height: 150,
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blueAccent, width: 2),
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.blue.withOpacity(0.05),
-        ),
-        child: imageFile == null
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(icon, size: 40, color: Colors.blueAccent),
-                  const SizedBox(height: 10),
-                  Text(label,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.grey)),
-                ],
-              )
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.file(imageFile, fit: BoxFit.cover),
+  Widget _buildMatchCard(Map<String, dynamic> match, int index) {
+    double? confidence;
+    if (match["confidence"] != null) {
+      try {
+        confidence = (match["confidence"] is num)
+            ? (match["confidence"] as num).toDouble()
+            : double.tryParse(match["confidence"].toString());
+      } catch (_) {
+        confidence = null;
+      }
+    }
+
+    return AnimationConfiguration.staggeredList(
+      position: index,
+      duration: const Duration(milliseconds: 400),
+      child: SlideAnimation(
+        verticalOffset: 20.0,
+        child: FadeInAnimation(
+          child: Card(
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            elevation: 4,
+            child: ListTile(
+              leading: (match["imageUrl"] != null &&
+                      match["imageUrl"].toString().isNotEmpty)
+                  ? Hero(
+                      tag: match["imageUrl"],
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(match["imageUrl"]),
+                        radius: 28,
+                      ),
+                    )
+                  : const CircleAvatar(child: Icon(Icons.person)),
+              title: Text(
+                match["name"]?.toString() ?? "Unknown",
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
+              subtitle: Text(
+                "Confidence: ${confidence != null ? confidence.toStringAsFixed(2) : "N/A"}",
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => MatchDetailPage(match: match),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -138,101 +122,191 @@ class _IdentifyPageState extends State<IdentifyPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text(
-          "Identify Person",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+        title: const Text("🔍 Identify Person"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        backgroundColor: Color.fromARGB(255, 13, 71, 163),
+        titleTextStyle: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        elevation: 2,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _buildImageContainer(
-              label: "Click to upload an image\nSupports JPG, PNG files",
-              icon: Icons.cloud_upload,
-              imageFile: _galleryImageFile,
-              onTap: _pickImage,
-            ),
-            _buildImageContainer(
-              label: "Click to capture image using camera",
-              icon: Icons.camera_alt,
-              imageFile: _cameraImageFile,
-              onTap: _captureImage,
-            ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.search),
-              label: const Text("Search Database"),
-              style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
-                  backgroundColor: const Color.fromARGB(255, 42, 77, 255),
-                  textStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
-              onPressed:
-                  (_galleryImageFile != null || _cameraImageFile != null) &&
-                          !_loading
-                      ? _searchDatabase
-                      : null,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: _image != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.file(
+                        _image!,
+                        key: ValueKey(_image),
+                        fit: BoxFit.cover,
+                        height: 220,
+                      ),
+                    )
+                  : Container(
+                      key: const ValueKey("placeholder"),
+                      height: 220,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.grey[300],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "📷 Upload or Capture an Image",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                child: _loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : _matches.isEmpty
-                        ? const Center(child: Text("No record found"))
-                        : SlideTransition(
-                            position: _slideAnimation,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Top Matches",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blueAccent),
-                                ),
-                                const SizedBox(height: 10),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: _matches.length,
-                                    itemBuilder: (context, index) {
-                                      return AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn,
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 8),
-                                        child: Card(
-                                          elevation: 3,
-                                          child: ListTile(
-                                            leading: CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  _matches[index]["imageUrl"]),
-                                            ),
-                                            title: Text(_matches[index]
-                                                    ["name"] ??
-                                                "Unknown"),
-                                            subtitle: Text(
-                                                "Confidence: ${_matches[index]["confidence"] ?? 'N/A'}"),
-                                            trailing: const Icon(
-                                                Icons.arrow_forward_ios,
-                                                size: 16),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-              ),
+
+            // Buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _animatedButton(Icons.photo, "Gallery",
+                    () => _pickImage(ImageSource.gallery)),
+                _animatedButton(Icons.camera_alt, "Camera",
+                    () => _pickImage(ImageSource.camera)),
+              ],
             ),
+            const SizedBox(height: 20),
+
+            // Search Button
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                backgroundColor: const Color.fromARGB(255, 13, 71, 161),
+                iconColor: Color.fromARGB(255, 255, 255, 255),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              onPressed: _loading ? null : _searchDatabase,
+              icon: const Icon(Icons.search),
+              label: _loading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Text(
+                      "Search Database",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(255, 255, 255, 255)),
+                    ),
+            ),
+            const SizedBox(height: 30),
+
+            // Top Matches
+            if (_matches.isNotEmpty)
+              AnimationLimiter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "🎯 Top Matches",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    ..._matches
+                        .asMap()
+                        .entries
+                        .map((entry) => _buildMatchCard(entry.value, entry.key))
+                        .toList(),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _animatedButton(IconData icon, String label, VoidCallback onPressed) {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 13, 71, 163),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 4,
+      ),
+      icon: Icon(icon),
+      label: Text(label),
+      onPressed: onPressed,
+    );
+  }
+}
+
+/// 🔹 Detail Page for a Match
+class MatchDetailPage extends StatelessWidget {
+  final Map<String, dynamic> match;
+
+  const MatchDetailPage({super.key, required this.match});
+
+  @override
+  Widget build(BuildContext context) {
+    double? confidence;
+    if (match["confidence"] != null) {
+      try {
+        confidence = (match["confidence"] is num)
+            ? (match["confidence"] as num).toDouble()
+            : double.tryParse(match["confidence"].toString());
+      } catch (_) {
+        confidence = null;
+      }
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(match["name"]?.toString() ?? "Person Details"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            (match["imageUrl"] != null &&
+                    match["imageUrl"].toString().isNotEmpty)
+                ? Hero(
+                    tag: match["imageUrl"],
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(match["imageUrl"]),
+                      radius: 60,
+                    ),
+                  )
+                : const CircleAvatar(
+                    radius: 60, child: Icon(Icons.person, size: 40)),
+
+            const SizedBox(height: 20),
+            Text(
+              match["name"]?.toString() ?? "Unknown",
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Confidence: ${confidence != null ? confidence.toStringAsFixed(2) : "N/A"}",
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+
+            // Extra details if available
+            if (match.containsKey("details"))
+              Text(
+                match["details"].toString(),
+                style: const TextStyle(fontSize: 16),
+              ),
           ],
         ),
       ),

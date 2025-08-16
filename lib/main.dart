@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
-import 'detection_page.dart';
 import 'setting_page.dart';
 import 'reports_page.dart';
 import 'login_page.dart'; // Import the login page
@@ -38,7 +37,6 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
     DashboardPage(),
-    DetectionsPage(),
     ReportsPage(),
     SettingsPage(),
   ];
@@ -50,15 +48,13 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color.fromARGB(255, 42, 77, 255),
+        selectedItemColor: const Color.fromARGB(255, 13, 71, 161),
         onTap: (index) {
           setState(() => _currentIndex = index);
         },
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.dashboard), label: "Dashboard"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.remove_red_eye), label: "Detections"),
           BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: "Reports"),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Settings"),

@@ -43,10 +43,9 @@ class _MessagePageState extends State<MessagePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Messages"),
-        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
-        titleTextStyle: TextStyle(
-          color: Color.fromARGB(255, 255, 255, 255),
-        ),
+        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
+        titleTextStyle:
+            TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 20),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

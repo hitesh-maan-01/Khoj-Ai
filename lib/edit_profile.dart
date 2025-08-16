@@ -9,10 +9,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  final String name = "Randeep Singh";
-  final String role = "Sub Inspector";
-  final String email = "randeepsingh@gmail.com";
-  final String profileImage = "https://via.placeholder.com/150";
+  final String name = "Shubham Yadav";
+  final String role = "Admin";
+  final String email = "imshubham1404@gmail.com";
+  final AssetImage profileImage =
+      const AssetImage('assets/Shubham/img_yadav.jpg');
 
   late AnimationController _fadeController;
   late AnimationController _imageController;
@@ -83,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage>
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+                backgroundColor: const Color.fromARGB(255, 13, 71, 161),
                 foregroundColor: Colors.white,
               ),
               onPressed: () {
@@ -116,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage>
           'Profile',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -130,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage>
                 scale: _scaleAnimation,
                 child: CircleAvatar(
                   radius: 55,
-                  backgroundImage: NetworkImage(profileImage),
+                  backgroundImage: profileImage, // ✅ fixed (uses AssetImage)
                 ),
               ),
               const SizedBox(height: 16),
@@ -154,7 +155,8 @@ class _ProfilePageState extends State<ProfilePage>
                     borderRadius: BorderRadius.circular(12)),
                 elevation: 3,
                 child: ListTile(
-                  leading: const Icon(Icons.lock, color: Colors.blue),
+                  leading: const Icon(Icons.lock,
+                      color: Color.fromARGB(255, 13, 71, 161)),
                   title: const Text(
                     "Change Password",
                     style: TextStyle(fontWeight: FontWeight.w600),

@@ -122,7 +122,7 @@ class _ReportsPageState extends State<ReportsPage> {
           "My Reports",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
       ),
       body: Column(
         children: [
@@ -132,7 +132,7 @@ class _ReportsPageState extends State<ReportsPage> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: "Search by name or location...",
+                hintText: "Search by name...",
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -191,13 +191,11 @@ class _ReportsPageState extends State<ReportsPage> {
                                             ? Hero(
                                                 tag:
                                                     'case-photo-${report['caseId'] ?? index}',
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
+                                                child: ClipOval(
                                                   child: Image.file(
                                                     File(report['photoPath']),
-                                                    width: 100,
-                                                    height: 100,
+                                                    width: 90,
+                                                    height: 90,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),

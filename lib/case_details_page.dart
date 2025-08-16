@@ -8,7 +8,7 @@ class CaseDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final photoPath = report['photoPath'] as String? ?? '';
-    final accentColor = const Color(0xFF2A4DFF);
+    final accentColor = const Color.fromARGB(255, 13, 71, 161);
 
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
@@ -30,28 +30,14 @@ class CaseDetailsPage extends StatelessWidget {
             // Case Image with Hero Animation
             if (photoPath.isNotEmpty)
               Hero(
-                tag:
-                    'case-photo-${report['caseId']}', // Unique tag for Hero animation
+                tag: 'case-photo-${report['caseId']}',
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.file(
-                      File(photoPath),
-                      height: 250,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                  alignment: Alignment.center,
+                  child: CircleAvatar(
+                    radius: 80, // adjust size
+                    backgroundColor: Colors.grey.shade200,
+                    backgroundImage: FileImage(File(photoPath)),
                   ),
                 ),
               ),
@@ -196,7 +182,7 @@ class _AnimatedContentState extends State<_AnimatedContent> {
 
           // Description Section
           _buildDescriptionSection(
-            title: "circumstances of missing",
+            title: "Circumstances of missing",
             color: widget.accentColor,
             value: widget.report['notes'] ?? '-',
           ),

@@ -29,7 +29,8 @@ class RecentActivity extends StatelessWidget {
             children: const [
               Text("Recent Activity",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text("View All", style: TextStyle(color: Color(0xFF2A4DFF))),
+              Text("View All",
+                  style: TextStyle(color: Color.fromARGB(255, 13, 71, 161))),
             ],
           ),
         ),

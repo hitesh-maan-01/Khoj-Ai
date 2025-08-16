@@ -204,7 +204,7 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
             height: 6,
             decoration: BoxDecoration(
               color: isActive
-                  ? const Color.fromARGB(255, 42, 77, 255)
+                  ? const Color.fromARGB(255, 13, 71, 161)
                   : Colors.grey.shade300,
               borderRadius: BorderRadius.circular(6),
             ),
@@ -275,7 +275,7 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
         ),
         centerTitle: false,
         elevation: 1,
-        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
       ),
       body: SafeArea(
         child: Column(
@@ -306,7 +306,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                             controller: _fullNameController,
                             decoration: const InputDecoration(
                                 labelText: 'Full Name *',
-                                prefixIcon: Icon(Icons.person)),
+                                prefixIcon: Icon(Icons.person),
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             validator: (v) => (v == null || v.trim().isEmpty)
                                 ? 'Please enter full name'
                                 : null,
@@ -320,7 +321,9 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                   keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
                                       labelText: 'Age *',
-                                      prefixIcon: Icon(Icons.cake)),
+                                      prefixIcon: Icon(Icons.cake),
+                                      iconColor:
+                                          Color.fromARGB(255, 13, 71, 163)),
                                   validator: (v) =>
                                       (v == null || v.trim().isEmpty)
                                           ? 'Enter age'
@@ -332,7 +335,9 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                 child: DropdownButtonFormField<String>(
                                   decoration: const InputDecoration(
                                       labelText: 'Gender *',
-                                      prefixIcon: Icon(Icons.wc)),
+                                      prefixIcon: Icon(Icons.wc),
+                                      iconColor:
+                                          Color.fromARGB(255, 13, 71, 163)),
                                   value: _gender,
                                   items: ['Male', 'Female', 'Other']
                                       .map((g) => DropdownMenuItem(
@@ -350,7 +355,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                             controller: _lastSeenLocationController,
                             decoration: const InputDecoration(
                                 labelText: 'Last Seen Location *',
-                                prefixIcon: Icon(Icons.location_on)),
+                                prefixIcon: Icon(Icons.location_on),
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             validator: (v) => (v == null || v.trim().isEmpty)
                                 ? 'Enter location'
                                 : null,
@@ -362,7 +368,9 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                               child: TextFormField(
                                 decoration: const InputDecoration(
                                     labelText: 'Date Last Seen',
-                                    prefixIcon: Icon(Icons.calendar_today)),
+                                    prefixIcon: Icon(Icons.calendar_today),
+                                    iconColor:
+                                        Color.fromARGB(255, 13, 71, 163)),
                                 controller: TextEditingController(
                                     text: _dateLastSeen == null
                                         ? ''
@@ -381,7 +389,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                             controller: _guardianNameController,
                             decoration: const InputDecoration(
                                 labelText: 'Guardian Name *',
-                                prefixIcon: Icon(Icons.person_outline)),
+                                prefixIcon: Icon(Icons.person_outline),
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             validator: (v) => (v == null || v.trim().isEmpty)
                                 ? 'Enter guardian name'
                                 : null,
@@ -392,7 +401,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                             keyboardType: TextInputType.phone,
                             decoration: const InputDecoration(
                                 labelText: 'Contact Number *',
-                                prefixIcon: Icon(Icons.phone)),
+                                prefixIcon: Icon(Icons.phone),
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             validator: (v) => (v == null || v.trim().isEmpty)
                                 ? 'Enter contact number'
                                 : null,
@@ -401,7 +411,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                           DropdownButtonFormField<String>(
                             decoration: const InputDecoration(
                                 labelText: 'Relationship *',
-                                prefixIcon: Icon(Icons.family_restroom)),
+                                prefixIcon: Icon(Icons.family_restroom),
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             value: _relationship,
                             items: [
                               'Parent',
@@ -439,7 +450,7 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                   onPressed: () => _validateAndNext(),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        const Color.fromARGB(255, 42, 77, 255),
+                                        const Color.fromARGB(255, 13, 71, 161),
                                   ),
                                   child: const Text(
                                     'Continue',
@@ -477,7 +488,9 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                   keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
                                       labelText: 'Height (cm/Feet) *',
-                                      prefixIcon: Icon(Icons.height)),
+                                      prefixIcon: Icon(Icons.height),
+                                      iconColor:
+                                          Color.fromARGB(255, 13, 71, 163)),
                                   validator: (v) =>
                                       (v == null || v.trim().isEmpty)
                                           ? 'Enter height'
@@ -491,7 +504,9 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                   keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
                                       labelText: 'Weight (kg)',
-                                      prefixIcon: Icon(Icons.monitor_weight)),
+                                      prefixIcon: Icon(Icons.monitor_weight),
+                                      iconColor:
+                                          Color.fromARGB(255, 13, 71, 163)),
                                 ),
                               ),
                             ],
@@ -501,7 +516,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                             controller: _clothingController,
                             decoration: const InputDecoration(
                                 labelText: 'Clothing / Last seen wearing',
-                                prefixIcon: Icon(Icons.checkroom)),
+                                prefixIcon: Icon(Icons.checkroom),
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             validator: (v) => (v == null || v.trim().isEmpty)
                                 ? 'Enter clothing details'
                                 : null,
@@ -512,7 +528,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                             decoration: const InputDecoration(
                                 labelText:
                                     'Distinguishing marks (tattoos, scars...)',
-                                prefixIcon: Icon(Icons.star)),
+                                prefixIcon: Icon(Icons.star),
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             maxLines: 2,
                           ),
                           const SizedBox(height: 12),
@@ -525,7 +542,9 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                     child: TextFormField(
                                       decoration: const InputDecoration(
                                           labelText: 'Last seen time',
-                                          prefixIcon: Icon(Icons.access_time)),
+                                          prefixIcon: Icon(Icons.access_time),
+                                          iconColor:
+                                              Color.fromARGB(255, 13, 71, 163)),
                                       controller: TextEditingController(
                                           text: _lastSeenTime ?? ''),
                                     ),
@@ -542,7 +561,8 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                             decoration: const InputDecoration(
                                 labelText: 'Circumstances of missing',
                                 prefixIcon: Icon(Icons.note),
-                                alignLabelWithHint: true),
+                                alignLabelWithHint: true,
+                                iconColor: Color.fromARGB(255, 13, 71, 163)),
                             maxLines: 3,
                           ),
                           const SizedBox(height: 20),
@@ -558,7 +578,7 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                   onPressed: () => _validateAndNext(),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        const Color.fromARGB(255, 42, 77, 255),
+                                        const Color.fromARGB(255, 13, 71, 161),
                                   ),
                                   child: const Text(
                                     'Continue',
@@ -645,7 +665,7 @@ class _ReportMissingPersonFlowState extends State<ReportMissingPersonFlow> {
                                     onPressed: _onSubmit,
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color.fromARGB(
-                                          255, 42, 77, 255),
+                                          255, 13, 71, 161),
                                     ),
                                     child: Row(
                                       mainAxisAlignment:

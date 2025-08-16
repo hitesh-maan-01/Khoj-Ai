@@ -17,7 +17,7 @@ class _ContactTeamPageState extends State<ContactTeamPage> {
   final _messageCtrl = TextEditingController();
   String? _orgType;
 
-  final Color accentColor = const Color.fromARGB(255, 42, 77, 255);
+  final Color accentColor = const Color.fromARGB(255, 13, 71, 161);
 
   @override
   void dispose() {

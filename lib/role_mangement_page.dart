@@ -20,6 +20,8 @@ class _RoleManagementPageState extends State<RoleManagementPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Role Management'),
+        backgroundColor: Color.fromARGB(255, 13, 71, 161),
+        titleTextStyle: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

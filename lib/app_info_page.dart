@@ -33,7 +33,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
           'App Information',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color.fromARGB(255, 42, 77, 255),
+        backgroundColor: const Color.fromARGB(255, 13, 71, 161),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -43,7 +43,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
           children: [
             const ListTile(
               leading: Icon(Icons.info_outline),
-              iconColor: Color.fromARGB(255, 42, 77, 255),
+              iconColor: Color.fromARGB(255, 13, 71, 161),
               title: Text('Khoj AI'),
               subtitle: Text('Missing Person Reporting'),
             ),
@@ -64,7 +64,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
                 child: const Text(
                   'About',
                   style: TextStyle(
-                      color: Color.fromARGB(255, 42, 77, 255),
+                      color: Color.fromARGB(255, 13, 71, 161),
                       fontWeight: FontWeight.bold),
                 )),
           ],

@@ -18,7 +18,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animController;
-  final Color accentColor = const Color.fromARGB(255, 42, 77, 255);
+  final Color accentColor = const Color.fromARGB(255, 13, 71, 161);
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage>
               onPressed: () => Navigator.of(c).pop(false),
               child: const Text(
                 'Cancel',
-                style: TextStyle(color: Color.fromARGB(255, 42, 77, 255)),
+                style: TextStyle(color: Color.fromARGB(255, 13, 71, 161)),
               )),
           ElevatedButton(
             onPressed: () {
@@ -66,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage>
             },
             child: const Text(
               'Logout',
-              style: TextStyle(color: Color.fromARGB(255, 42, 77, 255)),
+              style: TextStyle(color: Color.fromARGB(255, 13, 71, 161)),
             ),
           ),
         ],
@@ -113,13 +113,13 @@ class _SettingsPageState extends State<SettingsPage>
                     leading: CircleAvatar(
                       radius: 30,
                       backgroundImage:
-                          const NetworkImage('https://via.placeholder.com/150'),
+                          const AssetImage('assets/Shubham/img_yadav.jpg'),
                       backgroundColor: accentColor.withOpacity(0.1),
                     ),
-                    title: const Text('Officer Randeep Singh',
+                    title: const Text('Shubham Yadav',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16)),
-                    subtitle: const Text('Sub Inspector',
+                    subtitle: const Text('Admin',
                         style: TextStyle(color: Colors.black54)),
                     onTap: () => _openPage(const ProfilePage()),
                   ),
