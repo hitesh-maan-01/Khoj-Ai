@@ -1,68 +1,96 @@
+// recent_activity.dart
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'all_activity_page.dart';
 
-class RecentActivity extends StatelessWidget {
-  RecentActivity({super.key});
+class RecentActivity extends StatefulWidget {
+  const RecentActivity({super.key});
 
-  final List<Map<String, String>> recentActivity = [
-    {
-      "type": "High Priority Alert",
-      "detail": "Missing person case #MP-2024-001",
-      "time": "22h ago"
-    },
-    {"type": "Case Resolved", "detail": "TH-2024-045 closed", "time": "21 ago"},
-    {
-      "type": "New Detection",
-      "detail": "Facial recognition match found",
-      "time": "7h ago"
-    },
-  ];
+  @override
+  State<RecentActivity> createState() => _RecentActivityState();
+}
+
+class _RecentActivityState extends State<RecentActivity> {
+  List<Map<String, dynamic>> recentReports = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecentReports();
+  }
+
+  Future<void> _loadRecentReports() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? reportsData = prefs.getString('reports');
+
+    if (reportsData != null) {
+      try {
+        final decoded = json.decode(reportsData);
+        if (decoded is List) {
+          setState(() {
+            final allReports = List<Map<String, dynamic>>.from(decoded);
+            recentReports = allReports.reversed.take(4).toList();
+          });
+        }
+      } catch (e) {
+        debugPrint("Error decoding recent reports: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Header + View All button
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text("Recent Activity",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text("View All",
-                  style: TextStyle(color: Color.fromARGB(255, 13, 71, 161))),
+            children: [
+              const Text(
+                "Recent Activity",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AllActivityPage()),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor:
+                      const Color.fromARGB(255, 23, 71, 163), // text color
+                ),
+                child: const Text("View All"),
+              ),
             ],
           ),
         ),
-        const SizedBox(height: 8),
-        AnimationLimiter(
-          child: Column(
-            children: List.generate(recentActivity.length, (index) {
-              final activity = recentActivity[index];
-              return AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 500),
-                child: SlideAnimation(
-                  verticalOffset: 50.0,
-                  child: FadeInAnimation(
+
+        // List of recent reports
+        recentReports.isEmpty
+            ? const Center(child: Text("No recent activity"))
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: recentReports.length,
+                itemBuilder: (context, index) {
+                  final report = recentReports[index];
+                  return Card(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                     child: ListTile(
-                      leading: const CircleAvatar(
-                        backgroundColor: Colors.redAccent,
-                        child: Icon(Icons.notifications,
-                            color: Colors.white, size: 18),
-                      ),
-                      title: Text(activity["type"] ?? '',
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(activity["detail"] ?? ''),
-                      trailing: Text(activity["time"] ?? '',
-                          style: const TextStyle(color: Colors.grey)),
+                      leading: const Icon(Icons.assignment, color: Colors.blue),
+                      title: Text(report['fullName'] ?? "Unknown"),
+                      subtitle: Text(
+                          "Location: ${report['lastSeenLocation'] ?? 'N/A'}"),
                     ),
-                  ),
-                ),
-              );
-            }),
-          ),
-        ),
+                  );
+                },
+              ),
       ],
     );
   }

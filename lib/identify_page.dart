@@ -127,7 +127,8 @@ class _IdentifyPageState extends State<IdentifyPage>
         title: const Text("🔍 Identify Person"),
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 13, 71, 163),
-        titleTextStyle: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        titleTextStyle:
+            TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 20),
         elevation: 2,
       ),
       body: SingleChildScrollView(

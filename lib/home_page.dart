@@ -12,8 +12,8 @@ class DashboardPage extends StatelessWidget {
   final List<Map<String, dynamic>> dashboardCards = [
     {
       "title": "Total Cases",
-      "value": "25",
-      "change": "+12%",
+      "value": "10",
+      "change": "+10%",
       "color": Colors.blue
     },
     {
@@ -24,7 +24,7 @@ class DashboardPage extends StatelessWidget {
     },
     {
       "title": "New Reports",
-      "value": "3",
+      "value": "8",
       "status": "New",
       "color": Colors.orange
     },

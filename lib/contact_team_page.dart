@@ -60,6 +60,14 @@ ${_messageCtrl.text}
         const SnackBar(content: Text('Mail sent')),
       );
     }
+    setState(() {
+      _nameCtrl.clear();
+      _emailCtrl.clear();
+      _orgCtrl.clear();
+      _phoneCtrl.clear();
+      _messageCtrl.clear();
+      _orgType = null;
+    });
   }
 
   @override
@@ -103,7 +111,7 @@ ${_messageCtrl.text}
                 decoration:
                     const InputDecoration(labelText: 'Organization Type *'),
                 items: const [
-                  DropdownMenuItem(value: 'Army', child: Text('Army')),
+                  DropdownMenuItem(value: 'Admin', child: Text('Army')),
                   DropdownMenuItem(value: 'NGO', child: Text('NGO')),
                   DropdownMenuItem(value: 'NDRF', child: Text('NDRF')),
                   DropdownMenuItem(value: 'Police', child: Text('Police')),
